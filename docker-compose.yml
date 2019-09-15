@@ -1,0 +1,18 @@
+version: "3.7"
+
+services:
+    server:
+        build: .
+        image: tyke_test
+        volumes:
+            - ./:/app
+            # - /app/node_modules
+        ports:
+            - 3000:3000
+            - 9220:9220
+        depends_on:
+            - mongo
+        command: npm run dev
+
+    mongo:
+        image: mongo
