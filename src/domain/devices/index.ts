@@ -1,4 +1,5 @@
 import $db from "../../services/db";
+import $error from "../../services/error";
 
 const $uuid = require("uuid");
 
@@ -11,6 +12,7 @@ export interface Device {
     firmwareRevision: string;
 }
 
+/** @todo: validate and throw error if validation failed */
 export function factory(data: any): Device {
     let { deviceId, name, firmwareVersion, firmwareRevision } = data;
     return {
@@ -21,7 +23,7 @@ export function factory(data: any): Device {
     };
 }
 
-const $device = {
+const $devices = {
     create: async (data: any): Promise<Device> => {
         let device = factory(data);
 
@@ -32,6 +34,10 @@ const $device = {
 
     fetch: async (deviceId: string): Promise<Device> => {
         let record = await $db.findBy(TABLE_NAME, { deviceId });
+
+        if (record.length === 0) {
+            throw $error.NotFound(`Device ID: ${deviceId} not found`);
+        }
 
         let device = factory(record.shift());
 
@@ -45,4 +51,4 @@ const $device = {
     },
 };
 
-export default $device;
+export default $devices;

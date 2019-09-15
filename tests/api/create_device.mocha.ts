@@ -26,7 +26,7 @@ describe("CREATE DEVICE", () => {
         RESPONSE = await createDeviceEndpoint(FIXTURE);
     });
 
-    it("returns the created device", async () => {
+    it("returns a device", async () => {
         expect(RESPONSE.data).to.deep.eq(FIXTURE);
     });
 

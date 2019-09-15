@@ -3,6 +3,7 @@ import $axios from "../../src/adapters/axios";
 import $env from "@bahatron/env";
 import $db from "../../src/services/db";
 import { TABLE_NAME } from "../../src/domain/devices";
+import { AxiosResponse } from "axios";
 
 const $uuid = require("uuid");
 
@@ -30,5 +31,15 @@ describe("FETCH DEVICE", () => {
         let result = await fetchDeviceEndpoint(FIXTURE.deviceId);
 
         expect(result.data).to.deep.eq(FIXTURE);
+    });
+
+    it("returns status code 404 if device was not found", async () => {
+        try {
+            await fetchDeviceEndpoint(`i_dont_exist`);
+
+            throw new Error("Axios did not throw an error");
+        } catch (err) {
+            expect(err.response.status).to.eq(404);
+        }
     });
 });
